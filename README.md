@@ -9,6 +9,8 @@
 </a>
 </p>
 
+> [!NOTE]  
+> The Canopy team is no longer maintaining this repository. Thank you for your support and enthusiasm for the project! If you're looking for a high quality managed RAG solution with continued updates and improvements, please check out the [Pinecone Assistant](https://docs.pinecone.io/guides/assistant/understanding-assistant).
 
 **Canopy** is an open-source Retrieval Augmented Generation (RAG) framework and context engine built on top of the Pinecone vector database. Canopy enables you to quickly and easily experiment with and build applications using RAG. Start chatting with your documents or text data with a few simple commands.   
 
@@ -33,7 +35,7 @@ Canopy has two flows: knowledge base creation and chat. In the knowledge base cr
 1. **Canopy Core Library** - The library has 3 main classes that are responsible for different parts of the RAG workflow:
     * **ChatEngine** - Exposes a chat interface to interact with your data. Given the history of chat messages, the `ChatEngine` formulates relevant queries to the `ContextEngine`, then uses the LLM to generate a knowledgeable response.
     * **ContextEngine**  - Performs the “retrieval” part of RAG. The `ContextEngine` utilizes the underlying `KnowledgeBase` to retrieve the most relevant documents, then formulates a coherent textual context to be used as a prompt for the LLM. 
-    * **KnowledgeBase** - Manages your data for the RAG workflow. It automatically chunks and transforms your text data into text embeddings, storing them in a Pinecone vector database. Given a text query - the `KnowledgeBase` will retrieve the most relevant document chunks from the database. 
+    * **KnowledgeBase** - Manages your data for the RAG workflow. It automatically chunks and transforms your text data into text embeddings, storing them in a Pinecone(Default)/Qdrant vector database. Given a text query - the knowledge base will retrieve the most relevant document chunks from the database. 
 
 
 > More information about the Core Library usage can be found in the [Library Documentation](docs/library.md)
@@ -67,11 +69,12 @@ pip install canopy-sdk
 ### Extras
 
 | Name           | Description                                                                                                                                              |
-|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `grpc`         | To unlock some performance improvements by working with the GRPC version of the [Pinecone Client](https://github.com/pinecone-io/pinecone-python-client) |
 | `torch`        | To enable embeddings provided by [sentence-transformers](https://www.sbert.net/)                                                                         |
 | `transformers` | If you are using Anyscale LLMs, it's recommended to use `LLamaTokenizer` tokenizer which requires transformers as dependency                             |
 | `cohere`       | To use Cohere reranker or/and Cohere LLM                                                                                                                 |
+| `qdrant`       | To use [Qdrant](http://qdrant.tech/) as an alternate knowledge base                                                                                      |
 
 </details>
 
@@ -109,6 +112,7 @@ These optional environment variables are used to authenticate to other supported
 | `JINA_API_KEY`        | API key for Jina AI. Used to authenticate to JinaAI's services for embedding and chat API                                    | You can find your OpenAI API key [here](https://platform.openai.com/account/api-keys). You might need to login or register to OpenAI services                                |
 | `AZURE_OPENAI_ENDOINT`| The URL of the Azure OpenAI endpoint you deployed. | You can find this in the Azure OpenAI portal under _Keys and Endpoints`|
 | `AZURE_OPENAI_API_KEY` | The API key to use for your Azure OpenAI models. | You can find this in the Azure OpenAI portal under _Keys and Endpoints`|
+| `OCTOAI_API_KEY`       | API key for OctoAI. Used to authenticate for open source LLMs served in OctoAI                               | You can sign up for OctoAI and find your API key [here](https://octo.ai/)
 
 </details>
 
@@ -280,4 +284,3 @@ gunicorn canopy_server.app:app --worker-class uvicorn.workers.UvicornWorker --bi
 >  The server interacts with services like Pinecone and OpenAI using your own authentication credentials. 
    When deploying the server on a public web hosting provider, it is recommended to enable an authentication mechanism, 
    so that your server would only take requests from authenticated users.
-
